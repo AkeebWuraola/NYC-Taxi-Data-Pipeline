@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 """
-@author: User
+Created on Sat Oct 18 07:18:47 2025
+
+@author: Akeeb Wuraola
 """
 
 import time 
@@ -66,7 +69,7 @@ def download_parquet(urls):
         start_time = time.time()     
         
         try:
-            with requests.get(url, stream=True, timeout=60) as r:
+            with requests.get(url, stream=True,  timeout=(30, 600)) as r:
                 r.raise_for_status()
                 with open(os.path.join(folder,filename), 'wb') as file:
                     for chunk in r.iter_content(chunk_size=8192):
@@ -113,13 +116,14 @@ def convert_all_parquet_to_csv(*trip_type):
 base_url ='https://d37ci6vzurychx.cloudfront.net/trip-data'
 year = 2024 
 trip_type = ['yellow_tripdata','green_tripdata','fhv_tripdata','fhvhv_tripdata']
-months = [f'{m:02d}' for m in range(1,2)]
+
+months = [f'{m:02d}' for m in range(1,13)]
 
 # create folder per trip
 create_directory(*trip_type)
 urls =  generate_url(base_url,trip_type,year,months)
 
-
+# Download Process
 load_start_time = time.time()      # start timing
 print(f"Data download process starting at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
@@ -130,7 +134,8 @@ elapsed_time = (load_end_time - load_start_time)
 print(f"All data download process completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 print(f"Total data download took {time_format(elapsed_time)}")
 
-    
+# Conversion Process
+
 load_start_time = time.time()      # start timing
 print(f"Conversion to CSV starting at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
