@@ -146,6 +146,32 @@ elapsed_time = (load_end_time - load_start_time)
 print(f"All Conversion to CSV completed at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 print(f"Total CSV conversion took {time_format(elapsed_time)}")
 
+
+
+# base_url ='https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records'
+# metadata_store = ['Trip_metadata']
+# metadata_type = ['yellow','green','fhv','hvfhs']
+
+
+# def generate_metadata_url(base_url,metadata_type):
+#     urls = []
+#     for metadata in metadata_type:
+#         #for month in months:
+#         filename = f'{metadata}.pdf'
+#         # print(filename)
+#         urls.append((f'{base_url}_{filename}',f'tripdata_{filename}',metadata))
+#         # print(urls)
+#     return urls
+
+# download_parquet(urls)  
+# #print(generate_metadata_url(base_url, metadata_type))
+
+# # create folder for metadata
+# create_directory(*metadata_store)
+# urls =  generate_metadata_url(base_url, metadata_type)
+
+
+
 # parquet_to_csv(file_path, folder)
 # #Convert parquet files to csv for easy loading to sql server
 # csv_folder = os.path.join(folder, "csv_data")
