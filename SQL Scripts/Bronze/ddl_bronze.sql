@@ -40,7 +40,7 @@ IF OBJECT_ID('bronze.green_taxi_trip','U') IS NOT NULL
 	VendorID int,
 	lpep_pickup_datetime datetime,
 	lpep_dropoff_datetime datetime,
-	store_and_fwd_flag nvarchar(2),
+	store_and_fwd_flag nvarchar(5),
 	RatecodeID int ,
 	PULocationID int,
 	DOLocationID int,
