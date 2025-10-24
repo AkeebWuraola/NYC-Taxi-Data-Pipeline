@@ -18,7 +18,7 @@ IF OBJECT_ID('bronze.yellow_taxi_trip','U') IS NOT NULL
 	passenger_count int,
 	trip_distance float,
 	RatecodeID int ,
-	store_and_fwd_flag nvarchar(2),
+	store_and_fwd_flag nvarchar(5),
 	PULocationID int,
 	DOLocationID int,
 	payment_type int,
