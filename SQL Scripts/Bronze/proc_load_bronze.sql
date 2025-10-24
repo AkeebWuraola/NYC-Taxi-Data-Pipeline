@@ -3,7 +3,7 @@ from 'C:\Users\wuraola.akeeb\OneDrive - First City Monument Bank (FCMB)\Document
 with (
 	firstrow = 2, --specifies the beginning of your data
 	fieldterminator = ',', --specifies the delimeter
-	rowterminator = '0x0a',
+	rowterminator = '0x0a', -- The row terminator is \n
 	tablock --locks the table while insert is ongoing
 );
 
@@ -12,6 +12,6 @@ from 'C:\Users\wuraola.akeeb\OneDrive - First City Monument Bank (FCMB)\Document
 with (
 	firstrow = 2, --specifies the beginning of your data
 	fieldterminator = ',', --specifies the delimeter
-	rowterminator = '0x0a',
+	rowterminator = '0x0a',	--The row terminator is \n
 	tablock --locks the table while insert is ongoing
 );
