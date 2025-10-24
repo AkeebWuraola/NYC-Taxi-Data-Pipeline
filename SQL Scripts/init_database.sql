@@ -42,3 +42,25 @@ GO
 
 CREATE SCHEMA gold;
 GO
+
+USE NYCTaxiTrips;
+GO
+	
+IF OBJECT_ID('log_process_status','U') IS NOT NULL
+DROP TABLE log_process_status;
+CREATE TABLE  log_process_status (
+	id int identity(1,1) primary key,
+	process_type nvarchar(500),
+	process_name nvarchar(500),
+	table_name nvarchar(500),
+	status nvarchar(50),
+	row_count int,
+	process_start_time datetime,
+	process_end_time datetime,
+	error_number int null,
+	error_message nvarchar(max) null,
+	error_line int null,
+	error_procedure nvarchar(max) null,
+	load_date datetime default getdate() 
+);
+GO
