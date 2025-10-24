@@ -2,7 +2,7 @@
 =====================================================================================
 Sript Purpose:
 This stored procedure loads data into the bronze schema from external CSV files. 
-It automates the loading dynamically loading each file in the repository
+It dynamically loads each file in the repository
 --It truncates the bronze tables before loading the data
 It Uses the 'bulk insert' to load data from csv files to the tables
 Useful comment has been included
@@ -50,7 +50,6 @@ A cursor is used to iterate through each filename in the temp table.
 
 Each filename is fetched into the variable @file.
 
-
 Error with xp_cmdshell:
 SQL Server blocked access to procedure 'sys.xp_cmdshell' of component 'xp_cmdshell' because this component is turned off as part of the security configuration for this server. A system administrator can enable the use of 'xp_cmdshell' by using sp_configure. For more information about enabling 'xp_cmdshell', search for 'xp_cmdshell' in SQL Server Books Online.
 Description:
@@ -71,6 +70,8 @@ sp_configure 'xp_cmdshell', 0;
 reconfigure;
 
 */
+
+/* Loading the data manually 
 bulk insert bronze.yellow_taxi_trip
 from 'C:\Users\wuraola.akeeb\OneDrive - First City Monument Bank (FCMB)\Documents\PORTFOLIO\yellow_tripdata\csv_trip_data\yellow_tripdata_2024-01.csv'
 with (
@@ -88,3 +89,4 @@ with (
 	rowterminator = '0x0a',	--The row terminator is \n
 	tablock --locks the table while insert is ongoing
 );
+*/
