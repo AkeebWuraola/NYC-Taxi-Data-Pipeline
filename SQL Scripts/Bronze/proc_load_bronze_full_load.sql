@@ -3,7 +3,7 @@
 Sript Purpose:
 This stored procedure loads data into the bronze schema from external CSV files. 
 It dynamically loads each file in the repository
---It truncates the bronze tables before loading the data
+It truncates the bronze tables before loading the data. This is a full load procedure
 It Uses the 'bulk insert' to load data from csv files to the tables
 Useful comment has been included
 =====================================================================================
