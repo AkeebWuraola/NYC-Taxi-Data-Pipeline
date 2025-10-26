@@ -19,7 +19,7 @@ The project demonstrates a modern data architecture that supports:
 <li>Enable querying for KPIs such as:Total trips,Average fare amount,Trip distance distribution,Peak pickup/drop-off times</li>
 <li>Provide a BI layer or dashboard for visualization.</li>
 
-<h1>Naming Convention & General Principles</h1>
+<h1>3.  Naming Convention & General Principles</h1>
 To ensure consistency in naming, snake case with all lowercase and underscores to separate words will be used for this project
 English Language will be used and SQL Reserved words will not be used as object names
 
@@ -43,3 +43,7 @@ category describes the role of the table; if its a fact (fact) or dimension(dim)
 
 **Log tables**
 - All log table must start with log_
+
+  <h1>4.  Data Architecture</h1>
+<img width="956" height="562" alt="image" src="https://github.com/user-attachments/assets/d112cb01-824f-4bc3-a2ef-aa91a22b4fd2" />
+
