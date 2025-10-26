@@ -45,7 +45,7 @@ GO
 
 USE NYCTaxiTrips;
 GO
-	
+----------Create a log table for tracking process and pipeline load	
 IF OBJECT_ID('log_process_status','U') IS NOT NULL
 DROP TABLE log_process_status;
 CREATE TABLE  log_process_status (
@@ -64,3 +64,12 @@ CREATE TABLE  log_process_status (
 	load_date datetime default getdate() 
 );
 GO
+
+----------Create a file tracking (metadata) table
+create table bronze.etl_file_log (
+    file_name nvarchar(255) primary key,
+    table_name nvarchar(255),
+    load_timestamp datetime default getdate(),
+    row_count int,
+    load_status varchar(20) default 'SUCCESS'
+);
