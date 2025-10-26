@@ -69,7 +69,8 @@ GO
 create table bronze.etl_file_log (
     file_name nvarchar(255) primary key,
     table_name nvarchar(255),
-    load_timestamp datetime default getdate(),
     row_count int,
-    load_status varchar(20) default 'SUCCESS'
+    load_status varchar(20) default 'SUCCESS',
+    load_date datetime default getdate()
 );
+
