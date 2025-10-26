@@ -15,10 +15,11 @@ begin
     begin try 
         declare @start_time datetime,@end_time datetime;
         declare @prd_start_time datetime, @prd_end_time datetime;
-        declare @path nvarchar(max) 
-        declare @file nvarchar(255)
-        declare @cmd nvarchar(max)
-        declare @row_count int
+        declare @path nvarchar(max) ;
+        declare @file nvarchar(255);
+        declare @cmd nvarchar(max);
+        declare @row_count int;
+        declare @table_name nvarchar(255);
 
         set @prd_start_time = getdate();
         print '======================================================================';
@@ -29,10 +30,11 @@ begin
 	    print 'Loading Yellow Trip Table';
 	    print '----------------------------------------------------------------------';
 
-        set @start_time = getdate();
+        
 
-        ---set the file path
+            ---set the file path
             set @path = N'C:\Users\wuraola.akeeb\OneDrive - First City Monument Bank (FCMB)\Documents\PORTFOLIO\yellow_tripdata\csv_trip_data\'
+            set @table_name = N'bronze.yellow_taxi_trip'
 
             --create a temporary table to store files for each month
             drop table if exists #files
@@ -40,51 +42,57 @@ begin
             insert into #files
             exec xp_cmdshell 'dir /b "C:\Users\wuraola.akeeb\OneDrive - First City Monument Bank (FCMB)\Documents\PORTFOLIO\yellow_tripdata\csv_trip_data\yellow_tripdata_2024-*.csv"'
 
+            --truncate existing table
+            print '>> Truncating Table: '+@table_name ;
+	        exec('truncate table ' + @table_name)
+
             --create a cursor to iterate each file
             declare cur cursor for select filename from #files where filename is not null
             open cur
             fetch next from cur into @file
 
-            --truncate existing table
-            print '>> Truncating Table: bronze.yellow_taxi_trip ';
-	        truncate table bronze.yellow_taxi_trip
-
             --loop through all file
             while @@fetch_status = 0
             begin
-                set @cmd = '
-
-                print ''>> Inserting data into Table: bronze.yellow_taxi_trip ''; 
-                bulk insert bronze.yellow_taxi_trip
-                from ''' + @path + @file + '''
-                with (
-                    firstrow = 2,
-                    fieldterminator = '','',
-                    rowterminator = ''0x0a'',
-                    tablock,
-                    codepage = ''65001''
-                )'
-                exec(@cmd)
+                set @start_time = getdate();
+                print '>> Inserting ' +@file +' into '+ @table_name;
+                set @cmd = '                     
+                    bulk insert '+ @table_name + '
+                    from ''' + @path + @file + '''
+                    with (
+                        firstrow = 2,
+                        fieldterminator = '','',
+                        rowterminator = ''0x0a'',
+                        tablock,
+                        codepage = ''65001''
+                    )
+                '
+                exec(@cmd);
+                set @end_time = getdate();
+                print '>> Load Duration for '+ @file +': ' + cast(datediff(second,@start_time,@end_time) as nvarchar) +' seconds'
                 fetch next from cur into @file
             end
 
             close cur --stops the cursor from fetching more rows.
             deallocate cur --frees up memory used by the cursor.
             drop table #files
-        set @end_time = getdate();
-        print '>> Load Duration: ' + cast(datediff(second,@start_time,@end_time) as nvarchar) +' seconds'
 
         set @prd_end_time = getdate();
         print '>> ======================================================================'
 	    print '>> Load Duration of Bronze Layer: ' + cast(datediff(second,@prd_start_time,@prd_end_time) as nvarchar) +' seconds'
 	    print '>> ======================================================================'
+        set @row_count = (select count(*) from bronze.yellow_taxi_trip);
+
+        insert into log_process_status(process_type,process_name,table_name,status,row_count,process_start_time,process_end_time,load_date) 
+        values('stored procedure','Yellow Taxi Load',@table_name,'SUCCESS',@row_count,@prd_start_time,@prd_end_time,getdate())
+    
     end try 
     begin catch 
         print '======================================================================';
         print 'Error Occured during Loading bronze layer';
         print '======================================================================';
         insert into log_process_status 
-        values('stored procedure','Yellow Taxi Load','bronze.yellow_taxi_trip','FAILED','',@start_time,@end_time,error_number(),error_message(),error_line(),error_procedure(),getdate())
+        values('stored procedure','Yellow Taxi Load',@table_name,'FAILED',@row_count,@prd_start_time,@prd_end_time,error_number(),error_message(),error_line(),error_procedure(),getdate())
     end catch
 end
 /* Notes
