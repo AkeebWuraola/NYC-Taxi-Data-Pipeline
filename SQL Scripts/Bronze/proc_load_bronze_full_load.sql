@@ -4,6 +4,7 @@ Sript Purpose:
 This stored procedure loads data into the bronze schema from external CSV files. 
 It dynamically loads each file in the repository
 It truncates the bronze tables before loading the data. This is a full load procedure
+It also records the files that have been loaded into the file log table to enable a check while loading incrementally
 It Uses the 'bulk insert' to load data from csv files to the tables
 Useful comment has been included
 =====================================================================================
@@ -67,9 +68,22 @@ begin
                         codepage = ''65001''
                     )
                 '
-                exec(@cmd);
-                set @end_time = getdate();
-                print '>> Load Duration for '+ @file +': ' + cast(datediff(second,@start_time,@end_time) as nvarchar) +' seconds'
+                begin try
+                    exec(@cmd);
+                    set @end_time = getdate();
+                    print '>> Load Duration for '+ @file +': ' + cast(datediff(second,@start_time,@end_time) as nvarchar) +' seconds'
+                    set @row_count = @@rowcount; ---@@rowcount is a function that counts rows affected by the last sql run
+                    ---Log successful file load
+                    insert into bronze.etl_file_log
+                    values(@file,@table_name,@row_count,'success',getdate())
+                end try
+                begin catch
+                    ---Log failed file load
+                    insert into bronze.etl_file_log
+                    values(@file,@table_name,0,'failed',getdate())
+                    print '!! Error loading file: ' + @file + ' - ' + error_message();
+                end catch
+				
                 fetch next from cur into @file
             end
 
