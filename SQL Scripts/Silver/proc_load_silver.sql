@@ -6,7 +6,9 @@ It truncates the silver tables before loading the data
 It inserts data that has been transformed and cleaned from the bronze schema into the silver tables.
 =====================================================================================
 */
-insert into silver.yellow_taxi_trip
+insert into silver.yellow_taxi_trip(vendor_id, vendor_name , pickup_time, dropoff_time , trip_duration_mins, passenger_count, trip_distance 
+	, rate_code_id , rate_code_type ,	store_and_fwd_flag,	pickup_zone, droppoff_zone, payment_type, fare_amount, extra_fees
+	, mta_tax, tip_amount,	tolls_amount, improvement_surcharge, total_amount, congestion_surcharge, airport_fee)
 select vendorID vendor_id,
 case 
 	when vendorID = 1 then 'Creative Mobile Technologies, LLC'
