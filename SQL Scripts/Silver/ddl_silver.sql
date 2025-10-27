@@ -13,6 +13,7 @@ IF OBJECT_ID('silver.yellow_taxi_trip','U') IS NOT NULL
 	DROP TABLE silver.yellow_taxi_trip;
 	create table silver.yellow_taxi_trip (
 	vendor_id int,
+	Vendor_name nvarchar(250),
 	pickup_time datetime,
 	dropoff_time datetime,
 	trip_duration_mins int,
@@ -34,3 +35,4 @@ IF OBJECT_ID('silver.yellow_taxi_trip','U') IS NOT NULL
 	congestion_surcharge float,	
 	airport_fee float
 );
+
